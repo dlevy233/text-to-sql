@@ -97,24 +97,24 @@ echo "ANTHROPIC_API_KEY=your_api_key_here" > .env
 python prompt_evaluator.py
 ```
 
-### Advanced Options
+### Run Evaluation for Optimized Prompt
 
 The script supports several command-line arguments to customize the evaluation process:
 
 ```bash
-python prompt_evaluator.py [options]
+python prompt_evaluator.py --prompt ./prompts/optimized.txt --output ./eval_logs/optimized_evaluation_results.json --inject-schema
 ```
 
 #### Available Options:
 
 - `--prompt PATH`  
   Path to the prompt template file to use for evaluation.  
-  Default: Uses the default prompt template  
+  Default: `./prompts/original.txt` 
   Example: `--prompt ./prompts/optimized.txt`
 
 - `--output PATH`  
   Path where the evaluation results will be saved as JSON.  
-  Default: Results are printed to stdout  
+  Default: `./eval_logs/evaluation_results.json`
   Example: `--output ./eval_logs/my_evaluation.json`
 
 - `--db PATH`  
