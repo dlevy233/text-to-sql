@@ -132,6 +132,49 @@ python prompt_evaluator.py [options]
   Default: Disabled  
   Example: `--inject-schema` to enable schema injection
 
+### Evaluation Results and Logging
+
+The system automatically saves detailed evaluation results in the `./eval_logs` directory. Each evaluation run creates a JSON file containing:
+
+- The prompt template used
+- Configuration settings (schema injection, sample size, etc.)
+- Individual query results including:
+  - Original question
+  - Generated SQL
+  - Expected SQL
+  - Query execution results
+  - Success/failure status
+- Overall performance metrics
+
+Example evaluation result structure:
+```json
+{
+  "prompt_template": "...",
+  "prompt_path": "./prompts/optimized.txt",
+  "inject_schema": true,
+  "results": [
+    {
+      "question": "What is the average points per game for players in the 2023 season?",
+      "expected_sql": "SELECT AVG(points) FROM player_stats WHERE season = '2023'",
+      "generated_sql": "...",
+      "success": true,
+      "result_match": true
+    }
+  ],
+  "metrics": {
+    "total": 98,
+    "successful": 90,
+    "success_rate": 0.9184
+  }
+}
+```
+
+To analyze results across different runs, you can:
+1. Compare different prompt versions
+2. Track performance improvements
+3. Identify common failure patterns
+4. Optimize prompt templates based on results
+
 ## Data Format
 
 The ground truth data should be in JSON format with the following structure:
