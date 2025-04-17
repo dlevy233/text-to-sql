@@ -20,7 +20,6 @@ The system's performance shows dramatic improvements when using the optimized pr
 | Configuration | Accuracy |
 |--------------|----------|
 | Original Prompt (no schema) | 0% |
-| Optimized Prompt (no schema Injection) | 45.92% |
 | Optimized Prompt (with schema Injection) | 91.84% |
 
 These results are based on a comprehensive evaluation of 98 test cases from the NBA dataset.
