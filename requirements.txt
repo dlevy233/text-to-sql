@@ -1,0 +1,5 @@
+anthropic
+python-dotenv
+tabulate
+openai
+dspy_ai

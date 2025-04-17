@@ -1,0 +1,995 @@
+{
+  "prompt_template": "Convert this question to SQL:\n{{question}}",
+  "prompt_path": "./prompts/original.txt",
+  "inject_schema": false,
+  "results": [
+    {
+      "question": "How many teams are in the NBA?",
+      "expected_sql": "SELECT COUNT(*) as team_count FROM team LIMIT 1",
+      "generated_sql": "SELECT COUNT(*) AS total_nba_teams\nFROM teams\nWHERE league = 'NBA';",
+      "prompt_used": "Convert this question to SQL:\nHow many teams are in the NBA?",
+      "result_match": false,
+      "success": false,
+      "generated_result": null,
+      "expected_result": null
+    },
+    {
+      "question": "What are the 5 oldest teams in the NBA?",
+      "expected_sql": "SELECT full_name FROM team ORDER BY year_founded ASC LIMIT 5",
+      "generated_sql": "SELECT team_name, year_founded\nFROM nba_teams\nORDER BY year_founded ASC\nLIMIT 5;",
+      "prompt_used": "Convert this question to SQL:\nWhat are the 5 oldest teams in the NBA?",
+      "result_match": false,
+      "success": false,
+      "generated_result": null,
+      "expected_result": null
+    },
+    {
+      "question": "List all teams from California",
+      "expected_sql": "SELECT full_name FROM team WHERE state = 'California'",
+      "generated_sql": "SELECT *\nFROM teams\nWHERE state = 'California';",
+      "prompt_used": "Convert this question to SQL:\nList all teams from California",
+      "result_match": false,
+      "success": false,
+      "generated_result": null,
+      "expected_result": null
+    },
+    {
+      "question": "What's the total number of games played?",
+      "expected_sql": "SELECT COUNT(DISTINCT game_id) as total_games FROM game LIMIT 1",
+      "generated_sql": "SELECT COUNT(*) AS total_games_played\nFROM games;",
+      "prompt_used": "Convert this question to SQL:\nWhat's the total number of games played?",
+      "result_match": false,
+      "success": false,
+      "generated_result": null,
+      "expected_result": null
+    },
+    {
+      "question": "What's the highest scoring game?",
+      "expected_sql": "SELECT g.pts_home + g.pts_away as total_points FROM game g ORDER BY total_points DESC LIMIT 1",
+      "generated_sql": "SELECT *\nFROM games\nORDER BY score DESC\nLIMIT 1;",
+      "prompt_used": "Convert this question to SQL:\nWhat's the highest scoring game?",
+      "result_match": false,
+      "success": false,
+      "generated_result": null,
+      "expected_result": null
+    },
+    {
+      "question": "How many players are from Duke University?",
+      "expected_sql": "SELECT COUNT(*) as player_count FROM draft_history WHERE organization = 'Duke University' LIMIT 1",
+      "generated_sql": "SELECT COUNT(*) AS player_count\nFROM players\nWHERE college = 'Duke University';",
+      "prompt_used": "Convert this question to SQL:\nHow many players are from Duke University?",
+      "result_match": false,
+      "success": false,
+      "generated_result": null,
+      "expected_result": null
+    },
+    {
+      "question": "Which team has the most home games?",
+      "expected_sql": "SELECT t.full_name FROM game g JOIN team t ON g.team_id_home = t.id GROUP BY t.id, t.full_name ORDER BY COUNT(*) DESC LIMIT 1",
+      "generated_sql": "SELECT home_team, COUNT(*) AS home_games_count\nFROM games\nGROUP BY home_team\nORDER BY home_games_count DESC\nLIMIT 1;",
+      "prompt_used": "Convert this question to SQL:\nWhich team has the most home games?",
+      "result_match": false,
+      "success": false,
+      "generated_result": null,
+      "expected_result": null
+    },
+    {
+      "question": "What's the average points per game?",
+      "expected_sql": "SELECT ROUND(AVG(pts_home + pts_away) / 2, 2) as avg_points FROM game LIMIT 1",
+      "generated_sql": "SELECT AVG(points_per_game) FROM games;",
+      "prompt_used": "Convert this question to SQL:\nWhat's the average points per game?",
+      "result_match": false,
+      "success": false,
+      "generated_result": null,
+      "expected_result": null
+    },
+    {
+      "question": "List all players from Spain",
+      "expected_sql": "SELECT first_name, last_name FROM common_player_info WHERE country = 'Spain'",
+      "generated_sql": "SELECT *\nFROM players\nWHERE country = 'Spain';",
+      "prompt_used": "Convert this question to SQL:\nList all players from Spain",
+      "result_match": false,
+      "success": false,
+      "generated_result": null,
+      "expected_result": null
+    },
+    {
+      "question": "How many games went to overtime?",
+      "expected_sql": "SELECT COUNT(*) as ot_games FROM line_score WHERE pts_ot1_home IS NOT NULL LIMIT 1",
+      "generated_sql": "SELECT COUNT(*) AS overtime_games\nFROM games\nWHERE overtime = TRUE;",
+      "prompt_used": "Convert this question to SQL:\nHow many games went to overtime?",
+      "result_match": false,
+      "success": false,
+      "generated_result": null,
+      "expected_result": null
+    },
+    {
+      "question": "What's the most common jersey number?",
+      "expected_sql": "SELECT jersey FROM common_player_info WHERE jersey != '' GROUP BY jersey ORDER BY COUNT(*) DESC LIMIT 1",
+      "generated_sql": "SELECT jersey_number, COUNT(*) AS frequency\nFROM players\nGROUP BY jersey_number\nORDER BY frequency DESC\nLIMIT 1;",
+      "prompt_used": "Convert this question to SQL:\nWhat's the most common jersey number?",
+      "result_match": false,
+      "success": false,
+      "generated_result": null,
+      "expected_result": null
+    },
+    {
+      "question": "List all teams in the Eastern Conference",
+      "expected_sql": "SELECT full_name FROM team WHERE city IN ('Boston', 'Brooklyn', 'New York', 'Philadelphia', 'Toronto', 'Chicago', 'Cleveland', 'Detroit', 'Indiana', 'Milwaukee', 'Atlanta', 'Charlotte', 'Miami', 'Orlando', 'Washington')",
+      "generated_sql": "SELECT *\nFROM teams\nWHERE conference = 'Eastern'",
+      "prompt_used": "Convert this question to SQL:\nList all teams in the Eastern Conference",
+      "result_match": false,
+      "success": false,
+      "generated_result": null,
+      "expected_result": null
+    },
+    {
+      "question": "What's the average height of NBA players?",
+      "expected_sql": "SELECT ROUND(AVG(CAST(SUBSTR(height, 1, INSTR(height, '-')-1) AS FLOAT)), 2) as avg_height FROM common_player_info WHERE height != '' LIMIT 1",
+      "generated_sql": "SELECT AVG(height) AS average_height\nFROM players\nWHERE league = 'NBA';",
+      "prompt_used": "Convert this question to SQL:\nWhat's the average height of NBA players?",
+      "result_match": false,
+      "success": false,
+      "generated_result": null,
+      "expected_result": null
+    },
+    {
+      "question": "How many players were drafted in 2020?",
+      "expected_sql": "SELECT COUNT(*) as draft_count FROM draft_history WHERE season = '2020' LIMIT 1",
+      "generated_sql": "SELECT COUNT(*) \nFROM players \nWHERE draft_year = 2020;",
+      "prompt_used": "Convert this question to SQL:\nHow many players were drafted in 2020?",
+      "result_match": false,
+      "success": false,
+      "generated_result": null,
+      "expected_result": null
+    },
+    {
+      "question": "Which team has the newest arena?",
+      "expected_sql": "SELECT t.full_name FROM team t JOIN team_details td ON t.id = td.team_id ORDER BY td.arena DESC LIMIT 1",
+      "generated_sql": "SELECT team_name\nFROM teams\nJOIN arenas ON teams.arena_id = arenas.id\nORDER BY arenas.year_opened DESC\nLIMIT 1;",
+      "prompt_used": "Convert this question to SQL:\nWhich team has the newest arena?",
+      "result_match": false,
+      "success": false,
+      "generated_result": null,
+      "expected_result": null
+    },
+    {
+      "question": "What's the average weight of NBA players?",
+      "expected_sql": "SELECT ROUND(AVG(CAST(weight AS FLOAT)), 2) as avg_weight FROM common_player_info WHERE weight != '' LIMIT 1",
+      "generated_sql": "SELECT AVG(weight) AS average_weight\nFROM players\nWHERE league = 'NBA';",
+      "prompt_used": "Convert this question to SQL:\nWhat's the average weight of NBA players?",
+      "result_match": false,
+      "success": false,
+      "generated_result": null,
+      "expected_result": null
+    },
+    {
+      "question": "List all rookie players",
+      "expected_sql": "SELECT first_name, last_name FROM common_player_info WHERE season_exp = 0",
+      "generated_sql": "SELECT *\nFROM players\nWHERE rookie = TRUE;",
+      "prompt_used": "Convert this question to SQL:\nList all rookie players",
+      "result_match": false,
+      "success": false,
+      "generated_result": null,
+      "expected_result": null
+    },
+    {
+      "question": "How many games are played on Christmas Day?",
+      "expected_sql": "SELECT COUNT(*) as christmas_games FROM game_info WHERE strftime('%m-%d', game_date) = '12-25' LIMIT 1",
+      "generated_sql": "SELECT COUNT(*) AS games_on_christmas\nFROM games\nWHERE MONTH(game_date) = 12 AND DAY(game_date) = 25;",
+      "prompt_used": "Convert this question to SQL:\nHow many games are played on Christmas Day?",
+      "result_match": false,
+      "success": false,
+      "generated_result": null,
+      "expected_result": null
+    },
+    {
+      "question": "What's the most points scored by the home team?",
+      "expected_sql": "SELECT pts_home FROM game ORDER BY pts_home DESC LIMIT 1",
+      "generated_sql": "SELECT MAX(home_score) AS max_home_points\nFROM games;",
+      "prompt_used": "Convert this question to SQL:\nWhat's the most points scored by the home team?",
+      "result_match": false,
+      "success": false,
+      "generated_result": null,
+      "expected_result": null
+    },
+    {
+      "question": "Which team has the longest name?",
+      "expected_sql": "SELECT full_name FROM team ORDER BY LENGTH(full_name) DESC LIMIT 1",
+      "generated_sql": "SELECT team_name\nFROM teams\nORDER BY LENGTH(team_name) DESC\nLIMIT 1;",
+      "prompt_used": "Convert this question to SQL:\nWhich team has the longest name?",
+      "result_match": false,
+      "success": false,
+      "generated_result": null,
+      "expected_result": null
+    },
+    {
+      "question": "How many players are guards?",
+      "expected_sql": "SELECT COUNT(*) as guard_count FROM common_player_info WHERE position LIKE '%G%' LIMIT 1",
+      "generated_sql": "SELECT COUNT(*) \nFROM players \nWHERE position = 'Guard';",
+      "prompt_used": "Convert this question to SQL:\nHow many players are guards?",
+      "result_match": false,
+      "success": false,
+      "generated_result": null,
+      "expected_result": null
+    },
+    {
+      "question": "What's the average game time in hours?",
+      "expected_sql": "SELECT ROUND(AVG(CAST(SUBSTR(game_time, 1, INSTR(game_time, ':') - 1) AS INTEGER)), 2) as avg_hours FROM game_info WHERE game_time != '' LIMIT 1",
+      "generated_sql": "SELECT AVG(game_time_minutes / 60) AS average_game_time_hours\nFROM games;",
+      "prompt_used": "Convert this question to SQL:\nWhat's the average game time in hours?",
+      "result_match": false,
+      "success": false,
+      "generated_result": null,
+      "expected_result": null
+    },
+    {
+      "question": "List all teams that have never made the playoffs",
+      "expected_sql": "SELECT t.full_name FROM team t WHERE NOT EXISTS (SELECT 1 FROM game g WHERE g.season_type = 'Playoffs' AND (g.team_id_home = t.id OR g.team_id_away = t.id))",
+      "generated_sql": "SELECT team.name\nFROM team\nWHERE team.id NOT IN (\n    SELECT DISTINCT team_id\n    FROM playoffs\n)",
+      "prompt_used": "Convert this question to SQL:\nList all teams that have never made the playoffs",
+      "result_match": false,
+      "success": false,
+      "generated_result": null,
+      "expected_result": null
+    },
+    {
+      "question": "What's the most common player position?",
+      "expected_sql": "SELECT position FROM common_player_info WHERE position IS NOT NULL GROUP BY position ORDER BY COUNT(*) DESC LIMIT 1",
+      "generated_sql": "SELECT \n    position,\n    COUNT(*) AS position_count\nFROM \n    players\nGROUP BY \n    position\nORDER BY \n    position_count DESC\nLIMIT 1;",
+      "prompt_used": "Convert this question to SQL:\nWhat's the most common player position?",
+      "result_match": false,
+      "success": false,
+      "generated_result": null,
+      "expected_result": null
+    },
+    {
+      "question": "List all players drafted in 2016",
+      "expected_sql": "SELECT player_name FROM draft_history WHERE season = 2016 ORDER BY overall_pick",
+      "generated_sql": "SELECT *\nFROM players\nWHERE draft_year = 2016",
+      "prompt_used": "Convert this question to SQL:\nList all players drafted in 2016",
+      "result_match": false,
+      "success": false,
+      "generated_result": null,
+      "expected_result": null
+    },
+    {
+      "question": "What are the top 10 teams by total points scored?",
+      "expected_sql": "SELECT t.full_name FROM game g JOIN team t ON t.id = g.team_id_home OR t.id = g.team_id_away GROUP BY t.id, t.full_name ORDER BY SUM(CASE WHEN g.team_id_home = t.id THEN g.pts_home ELSE g.pts_away END) DESC LIMIT 10",
+      "generated_sql": "SELECT team_name, SUM(points_scored) AS total_points\nFROM teams\nJOIN games ON teams.team_id = games.team_id\nGROUP BY team_name\nORDER BY total_points DESC\nLIMIT 10;",
+      "prompt_used": "Convert this question to SQL:\nWhat are the top 10 teams by total points scored?",
+      "result_match": false,
+      "success": false,
+      "generated_result": null,
+      "expected_result": null
+    },
+    {
+      "question": "List all games where both teams scored over 110 points",
+      "expected_sql": "SELECT g.game_id FROM game g WHERE g.pts_home > 110 AND g.pts_away > 110",
+      "generated_sql": "SELECT *\nFROM games\nWHERE home_team_score > 110 AND away_team_score > 110",
+      "prompt_used": "Convert this question to SQL:\nList all games where both teams scored over 110 points",
+      "result_match": false,
+      "success": false,
+      "generated_result": null,
+      "expected_result": null
+    },
+    {
+      "question": "How many active players are there?",
+      "expected_sql": "SELECT COUNT(*) as active_players FROM player WHERE is_active = 1",
+      "generated_sql": "SELECT COUNT(*) AS active_player_count\nFROM players\nWHERE status = 'active';",
+      "prompt_used": "Convert this question to SQL:\nHow many active players are there?",
+      "result_match": false,
+      "success": false,
+      "generated_result": null,
+      "expected_result": null
+    },
+    {
+      "question": "What's the most common jersey number by position?",
+      "expected_sql": "SELECT cpi.position, cpi.jersey FROM common_player_info cpi WHERE cpi.jersey != '' AND cpi.position IS NOT NULL GROUP BY cpi.position, cpi.jersey ORDER BY COUNT(*) DESC LIMIT 1",
+      "generated_sql": "SELECT \n    position,\n    jersey_number,\n    COUNT(*) as number_of_players\nFROM \n    players\nGROUP BY \n    position, jersey_number\nHAVING \n    COUNT(*) = (\n        SELECT MAX(player_count)\n        FROM (\n            SELECT \n                p.position,\n                p.jersey_number,\n                COUNT(*) as player_count\n            FROM \n                players p\n            GROUP BY \n                p.position, p.jersey_number\n        ) as position_jersey_counts\n        WHERE position_jersey_counts.position = players.position\n    )\nORDER BY \n    position;",
+      "prompt_used": "Convert this question to SQL:\nWhat's the most common jersey number by position?",
+      "result_match": false,
+      "success": false,
+      "generated_result": null,
+      "expected_result": null
+    },
+    {
+      "question": "Which team has the biggest home court advantage in terms of win percentage?",
+      "expected_sql": "SELECT t.full_name FROM game g JOIN team t ON t.id IN (g.team_id_home, g.team_id_away) GROUP BY t.id, t.full_name HAVING COUNT(*) >= 100 ORDER BY (CAST(SUM(CASE WHEN g.team_id_home = t.id AND g.pts_home > g.pts_away THEN 1 ELSE 0 END) AS FLOAT) / COUNT(CASE WHEN g.team_id_home = t.id THEN 1 END) * 100 - CAST(SUM(CASE WHEN g.team_id_away = t.id AND g.pts_away > g.pts_home THEN 1 ELSE 0 END) AS FLOAT) / COUNT(CASE WHEN g.team_id_away = t.id THEN 1 END) * 100) DESC LIMIT 1",
+      "generated_sql": "SELECT \n    team_name,\n    COUNT(CASE WHEN home_team_score > away_team_score THEN 1 END) AS home_wins,\n    COUNT(*) AS total_home_games,\n    ROUND((COUNT(CASE WHEN home_team_score > away_team_score THEN 1 END) * 100.0) / COUNT(*), 2) AS home_win_percentage\nFROM \n    games\nJOIN \n    teams ON games.home_team_id = teams.team_id\nGROUP BY \n    team_name\nHAVING \n    COUNT(*) >= 10  -- Optional: minimum number of games to consider\nORDER BY \n    home_win_percentage DESC\nLIMIT 1;",
+      "prompt_used": "Convert this question to SQL:\nWhich team has the biggest home court advantage in terms of win percentage?",
+      "result_match": false,
+      "success": false,
+      "generated_result": null,
+      "expected_result": null
+    },
+    {
+      "question": "Which season type has the highest average attendance?",
+      "expected_sql": "SELECT g.season_type, ROUND(AVG(gi.attendance), 0) as avg_attendance FROM game g JOIN game_info gi ON g.game_id = gi.game_id WHERE gi.attendance > 0 GROUP BY g.season_type ORDER BY avg_attendance DESC LIMIT 1",
+      "generated_sql": "SELECT \n    season_type,\n    AVG(attendance) AS average_attendance\nFROM \n    games\nGROUP BY \n    season_type\nORDER BY \n    average_attendance DESC\nLIMIT 1;",
+      "prompt_used": "Convert this question to SQL:\nWhich season type has the highest average attendance?",
+      "result_match": false,
+      "success": false,
+      "generated_result": null,
+      "expected_result": null
+    },
+    {
+      "question": "Which team has had the most different home arenas?",
+      "expected_sql": "SELECT t.full_name FROM team t JOIN team_details td ON t.id = td.team_id GROUP BY t.id, t.full_name ORDER BY COUNT(DISTINCT td.arena) DESC LIMIT 1",
+      "generated_sql": "SELECT \n    team_name,\n    COUNT(DISTINCT arena_name) AS number_of_arenas\nFROM \n    teams\nJOIN \n    team_arenas ON teams.team_id = team_arenas.team_id\nGROUP BY \n    team_name\nORDER BY \n    number_of_arenas DESC\nLIMIT 1;",
+      "prompt_used": "Convert this question to SQL:\nWhich team has had the most different home arenas?",
+      "result_match": false,
+      "success": false,
+      "generated_result": null,
+      "expected_result": null
+    },
+    {
+      "question": "What's the most common first name among NBA players?",
+      "expected_sql": "SELECT first_name FROM player GROUP BY first_name ORDER BY COUNT(*) DESC LIMIT 1",
+      "generated_sql": "SELECT first_name, COUNT(*) as name_count\nFROM players\nWHERE league = 'NBA'\nGROUP BY first_name\nORDER BY name_count DESC\nLIMIT 1;",
+      "prompt_used": "Convert this question to SQL:\nWhat's the most common first name among NBA players?",
+      "result_match": false,
+      "success": false,
+      "generated_result": null,
+      "expected_result": null
+    },
+    {
+      "question": "Which conference produces the most drafted players?",
+      "expected_sql": "SELECT CASE WHEN dh.organization LIKE '%ACC%' THEN 'ACC' WHEN dh.organization LIKE '%SEC%' THEN 'SEC' WHEN dh.organization LIKE '%Big Ten%' THEN 'Big Ten' ELSE 'Other' END as conference FROM draft_history dh WHERE dh.organization_type = 'College/University' GROUP BY conference ORDER BY COUNT(DISTINCT dh.person_id) DESC LIMIT 1",
+      "generated_sql": "SELECT \n    conference,\n    COUNT(*) AS drafted_players_count\nFROM \n    players\nWHERE \n    drafted = TRUE  -- Assuming there's a boolean field indicating if a player was drafted\n    -- OR draft_position IS NOT NULL  -- Alternative condition if draft status is stored differently\nGROUP BY \n    conference\nORDER BY \n    drafted_players_count DESC\nLIMIT 1;",
+      "prompt_used": "Convert this question to SQL:\nWhich conference produces the most drafted players?",
+      "result_match": false,
+      "success": false,
+      "generated_result": null,
+      "expected_result": null
+    },
+    {
+      "question": "Which team has the highest percentage of international players?",
+      "expected_sql": "SELECT t.full_name FROM common_player_info cpi JOIN team t ON cpi.team_id = t.id GROUP BY cpi.team_id, t.full_name HAVING COUNT(*) >= 10 ORDER BY CAST(SUM(CASE WHEN cpi.country != 'USA' THEN 1 ELSE 0 END) AS FLOAT) / COUNT(*) * 100 DESC LIMIT 1",
+      "generated_sql": "SELECT \n    team_name,\n    (COUNT(CASE WHEN is_international = TRUE THEN 1 ELSE NULL END) * 100.0 / COUNT(*)) AS international_percentage\nFROM \n    players\nGROUP BY \n    team_name\nORDER BY \n    international_percentage DESC\nLIMIT 1;",
+      "prompt_used": "Convert this question to SQL:\nWhich team has the highest percentage of international players?",
+      "result_match": false,
+      "success": false,
+      "generated_result": null,
+      "expected_result": null
+    },
+    {
+      "question": "Which school has the best average draft position?",
+      "expected_sql": "SELECT dh.organization FROM draft_history dh WHERE dh.organization_type = 'College/University' GROUP BY dh.organization HAVING COUNT(*) >= 5 ORDER BY AVG(dh.overall_pick) ASC LIMIT 1",
+      "generated_sql": "SELECT \n    school,\n    AVG(draft_position) AS average_draft_position\nFROM \n    players\nWHERE \n    draft_position IS NOT NULL\nGROUP BY \n    school\nORDER BY \n    average_draft_position ASC\nLIMIT 1;",
+      "prompt_used": "Convert this question to SQL:\nWhich school has the best average draft position?",
+      "result_match": false,
+      "success": false,
+      "generated_result": null,
+      "expected_result": null
+    },
+    {
+      "question": "List all teams that have never changed their team name",
+      "expected_sql": "SELECT t.full_name FROM team t LEFT JOIN team_history th ON t.id = th.team_id WHERE th.team_id IS NULL",
+      "generated_sql": "SELECT t.team_id, t.name\nFROM teams t\nWHERE NOT EXISTS (\n    SELECT 1\n    FROM team_name_changes\n    WHERE team_id = t.team_id\n);",
+      "prompt_used": "Convert this question to SQL:\nList all teams that have never changed their team name",
+      "result_match": false,
+      "success": false,
+      "generated_result": null,
+      "expected_result": null
+    },
+    {
+      "question": "Who is the referee that has officiated the most games?",
+      "expected_sql": "SELECT o.first_name || ' ' || o.last_name as name FROM officials o GROUP BY o.official_id, o.first_name, o.last_name ORDER BY COUNT(*) DESC LIMIT 1",
+      "generated_sql": "SELECT referee_name, COUNT(*) AS games_officiated\nFROM matches\nGROUP BY referee_name\nORDER BY games_officiated DESC\nLIMIT 1;",
+      "prompt_used": "Convert this question to SQL:\nWho is the referee that has officiated the most games?",
+      "result_match": false,
+      "success": false,
+      "generated_result": null,
+      "expected_result": null
+    },
+    {
+      "question": "List all games with more than 15 lead changes",
+      "expected_sql": "SELECT g.game_id FROM game g JOIN other_stats os ON g.game_id = os.game_id WHERE os.lead_changes > 15",
+      "generated_sql": "SELECT *\nFROM games\nWHERE lead_changes > 15",
+      "prompt_used": "Convert this question to SQL:\nList all games with more than 15 lead changes",
+      "result_match": false,
+      "success": false,
+      "generated_result": null,
+      "expected_result": null
+    },
+    {
+      "question": "Which team has the highest win percentage?",
+      "expected_sql": "SELECT t.full_name FROM game g JOIN team t ON t.id = g.team_id_home OR t.id = g.team_id_away GROUP BY t.id, t.full_name HAVING COUNT(*) >= 100 ORDER BY CAST(SUM(CASE WHEN (g.team_id_home = t.id AND g.pts_home > g.pts_away) OR (g.team_id_away = t.id AND g.pts_away > g.pts_home) THEN 1 ELSE 0 END) AS FLOAT) / COUNT(*) * 100 DESC LIMIT 1",
+      "generated_sql": "SELECT \n    team_name,\n    (wins / CAST(games_played AS FLOAT)) * 100 AS win_percentage\nFROM \n    teams\nORDER BY \n    win_percentage DESC\nLIMIT 1;",
+      "prompt_used": "Convert this question to SQL:\nWhich team has the highest win percentage?",
+      "result_match": false,
+      "success": false,
+      "generated_result": null,
+      "expected_result": null
+    },
+    {
+      "question": "List all games where both teams scored over 120 points",
+      "expected_sql": "SELECT g.game_id FROM game g WHERE g.pts_home > 120 AND g.pts_away > 120",
+      "generated_sql": "SELECT *\nFROM games\nWHERE home_team_score > 120 AND away_team_score > 120",
+      "prompt_used": "Convert this question to SQL:\nList all games where both teams scored over 120 points",
+      "result_match": false,
+      "success": false,
+      "generated_result": null,
+      "expected_result": null
+    },
+    {
+      "question": "What's the average attendance for Lakers home games?",
+      "expected_sql": "SELECT AVG(gi.attendance) as avg_attendance FROM game g JOIN team t ON g.team_id_home = t.id JOIN game_info gi ON g.game_id = gi.game_id WHERE t.nickname = 'Lakers'",
+      "generated_sql": "SELECT AVG(attendance) AS average_home_attendance\nFROM games\nWHERE home_team = 'Lakers';",
+      "prompt_used": "Convert this question to SQL:\nWhat's the average attendance for Lakers home games?",
+      "result_match": false,
+      "success": false,
+      "generated_result": null,
+      "expected_result": null
+    },
+    {
+      "question": "List all players from Serbia",
+      "expected_sql": "SELECT first_name, last_name FROM common_player_info WHERE country = 'Serbia'",
+      "generated_sql": "SELECT *\nFROM players\nWHERE country = 'Serbia';",
+      "prompt_used": "Convert this question to SQL:\nList all players from Serbia",
+      "result_match": false,
+      "success": false,
+      "generated_result": null,
+      "expected_result": null
+    },
+    {
+      "question": "How many games were played in 2019?",
+      "expected_sql": "SELECT COUNT(DISTINCT game_id) as games_played FROM game_info WHERE strftime('%Y', game_date) = '2019'",
+      "generated_sql": "SELECT COUNT(*) \nFROM games \nWHERE YEAR(game_date) = 2019;",
+      "prompt_used": "Convert this question to SQL:\nHow many games were played in 2019?",
+      "result_match": false,
+      "success": false,
+      "generated_result": null,
+      "expected_result": null
+    },
+    {
+      "question": "What is the arena capacity for the Warriors?",
+      "expected_sql": "SELECT td.arenacapacity FROM team t JOIN team_details td ON t.id = td.team_id WHERE t.nickname = 'Warriors'",
+      "generated_sql": "SELECT arena_capacity\nFROM teams\nWHERE team_name = 'Warriors';",
+      "prompt_used": "Convert this question to SQL:\nWhat is the arena capacity for the Warriors?",
+      "result_match": false,
+      "success": false,
+      "generated_result": null,
+      "expected_result": null
+    },
+    {
+      "question": "Who is the player that was inactive the most times for the Celtics?",
+      "expected_sql": "SELECT ip.first_name || ' ' || ip.last_name as player_name FROM inactive_players ip JOIN team t ON ip.team_id = t.id WHERE t.nickname = 'Celtics' GROUP BY ip.player_id, ip.first_name, ip.last_name ORDER BY COUNT(*) DESC LIMIT 1",
+      "generated_sql": "SELECT \n    player_name,\n    COUNT(*) AS inactive_count\nFROM \n    games_players\nWHERE \n    team_name = 'Celtics'\n    AND status = 'Inactive'\nGROUP BY \n    player_name\nORDER BY \n    inactive_count DESC\nLIMIT 1;",
+      "prompt_used": "Convert this question to SQL:\nWho is the player that was inactive the most times for the Celtics?",
+      "result_match": false,
+      "success": false,
+      "generated_result": null,
+      "expected_result": null
+    },
+    {
+      "question": "How many points did the Warriors score in the paint in their home games?",
+      "expected_sql": "SELECT SUM(os.pts_paint_home) as total_paint_points FROM game g JOIN team t ON g.team_id_home = t.id JOIN other_stats os ON g.game_id = os.game_id WHERE t.nickname = 'Warriors'",
+      "generated_sql": "SELECT SUM(points_in_paint) AS total_points_in_paint\nFROM game_stats\nJOIN games ON game_stats.game_id = games.game_id\nJOIN teams ON game_stats.team_id = teams.team_id\nWHERE teams.team_name = 'Warriors'\nAND games.home_team_id = teams.team_id;",
+      "prompt_used": "Convert this question to SQL:\nHow many points did the Warriors score in the paint in their home games?",
+      "result_match": false,
+      "success": false,
+      "generated_result": null,
+      "expected_result": null
+    },
+    {
+      "question": "List all games that went to overtime",
+      "expected_sql": "SELECT g.game_id FROM game g JOIN line_score ls ON g.game_id = ls.game_id WHERE ls.pts_ot1_home IS NOT NULL",
+      "generated_sql": "SELECT *\nFROM games\nWHERE went_to_overtime = TRUE;",
+      "prompt_used": "Convert this question to SQL:\nList all games that went to overtime",
+      "result_match": false,
+      "success": false,
+      "generated_result": null,
+      "expected_result": null
+    },
+    {
+      "question": "Which team had the most nationally televised games?",
+      "expected_sql": "SELECT t.full_name FROM game_summary gs JOIN team t ON gs.home_team_id = t.id OR gs.visitor_team_id = t.id WHERE gs.natl_tv_broadcaster_abbreviation IS NOT NULL GROUP BY t.id, t.full_name ORDER BY COUNT(*) DESC LIMIT 1",
+      "generated_sql": "SELECT team_name, COUNT(*) AS nationally_televised_games\nFROM games\nWHERE nationally_televised = TRUE\nGROUP BY team_name\nORDER BY nationally_televised_games DESC\nLIMIT 1;",
+      "prompt_used": "Convert this question to SQL:\nWhich team had the most nationally televised games?",
+      "result_match": false,
+      "success": false,
+      "generated_result": null,
+      "expected_result": null
+    },
+    {
+      "question": "Which team scored the most fast break points?",
+      "expected_sql": "SELECT t.full_name FROM game g JOIN team t ON t.id = g.team_id_home OR t.id = g.team_id_away JOIN other_stats os ON g.game_id = os.game_id GROUP BY t.id, t.full_name ORDER BY SUM(CASE WHEN g.team_id_home = t.id THEN os.pts_fb_home ELSE os.pts_fb_away END) DESC LIMIT 1",
+      "generated_sql": "SELECT team_name, SUM(fast_break_points) AS total_fast_break_points\nFROM team_stats\nGROUP BY team_name\nORDER BY total_fast_break_points DESC\nLIMIT 1",
+      "prompt_used": "Convert this question to SQL:\nWhich team scored the most fast break points?",
+      "result_match": false,
+      "success": false,
+      "generated_result": null,
+      "expected_result": null
+    },
+    {
+      "question": "Which team has the best record in close games (margin \u2264 5 points)?",
+      "expected_sql": "SELECT t.full_name FROM game g JOIN team t ON t.id IN (g.team_id_home, g.team_id_away) WHERE ABS(g.pts_home - g.pts_away) <= 5 GROUP BY t.id, t.full_name HAVING COUNT(*) >= 100 ORDER BY CAST(SUM(CASE WHEN (g.team_id_home = t.id AND g.pts_home > g.pts_away) OR (g.team_id_away = t.id AND g.pts_away > g.pts_home) THEN 1 ELSE 0 END) AS FLOAT) / COUNT(*) * 100 DESC LIMIT 1",
+      "generated_sql": "SELECT \n    team,\n    SUM(CASE WHEN won = 1 THEN 1 ELSE 0 END) AS wins,\n    SUM(CASE WHEN won = 0 THEN 1 ELSE 0 END) AS losses,\n    SUM(CASE WHEN won = 1 THEN 1 ELSE 0 END) / \n        CAST(COUNT(*) AS FLOAT) AS win_percentage\nFROM (\n    SELECT \n        home_team AS team,\n        CASE WHEN home_score > away_score THEN 1 ELSE 0 END AS won\n    FROM games\n    WHERE ABS(home_score - away_score) <= 5\n    \n    UNION ALL\n    \n    SELECT \n        away_team AS team,\n        CASE WHEN away_score > home_score THEN 1 ELSE 0 END AS won\n    FROM games\n    WHERE ABS(home_score - away_score) <= 5\n) AS close_games\nGROUP BY team\nORDER BY win_percentage DESC, wins DESC\nLIMIT 1;",
+      "prompt_used": "Convert this question to SQL:\nWhich team has the best record in close games (margin \u2264 5 points)?",
+      "result_match": false,
+      "success": false,
+      "generated_result": null,
+      "expected_result": null
+    },
+    {
+      "question": "Who is the player with the longest name?",
+      "expected_sql": "SELECT first_name || ' ' || last_name as full_name FROM common_player_info ORDER BY LENGTH(first_name || ' ' || last_name) DESC LIMIT 1",
+      "generated_sql": "SELECT player_name\nFROM players\nORDER BY LENGTH(player_name) DESC\nLIMIT 1;",
+      "prompt_used": "Convert this question to SQL:\nWho is the player with the longest name?",
+      "result_match": false,
+      "success": false,
+      "generated_result": null,
+      "expected_result": null
+    },
+    {
+      "question": "What's the average margin of victory in playoff games?",
+      "expected_sql": "SELECT ROUND(AVG(ABS(g.pts_home - g.pts_away)), 2) as avg_margin FROM game g WHERE g.season_type = 'Playoffs'",
+      "generated_sql": "SELECT AVG(ABS(home_score - away_score)) AS average_margin_of_victory\nFROM games\nWHERE is_playoff_game = TRUE;",
+      "prompt_used": "Convert this question to SQL:\nWhat's the average margin of victory in playoff games?",
+      "result_match": false,
+      "success": false,
+      "generated_result": null,
+      "expected_result": null
+    },
+    {
+      "question": "Which team has the most different players on their all-time roster?",
+      "expected_sql": "SELECT t.full_name FROM team t JOIN common_player_info cpi ON t.id = cpi.team_id GROUP BY t.id, t.full_name ORDER BY COUNT(DISTINCT cpi.person_id) DESC LIMIT 1",
+      "generated_sql": "SELECT \n    team_name,\n    COUNT(DISTINCT player_id) AS total_players\nFROM \n    team_rosters\nGROUP BY \n    team_name\nORDER BY \n    total_players DESC\nLIMIT 1;",
+      "prompt_used": "Convert this question to SQL:\nWhich team has the most different players on their all-time roster?",
+      "result_match": false,
+      "success": false,
+      "generated_result": null,
+      "expected_result": null
+    },
+    {
+      "question": "What's the most common final score?",
+      "expected_sql": "SELECT g.pts_home || '-' || g.pts_away as score FROM game g GROUP BY g.pts_home, g.pts_away ORDER BY COUNT(*) DESC LIMIT 1",
+      "generated_sql": "SELECT final_score, COUNT(*) AS frequency\nFROM games\nGROUP BY final_score\nORDER BY frequency DESC\nLIMIT 1;",
+      "prompt_used": "Convert this question to SQL:\nWhat's the most common final score?",
+      "result_match": false,
+      "success": false,
+      "generated_result": null,
+      "expected_result": null
+    },
+    {
+      "question": "Which team has the best record on Christmas Day?",
+      "expected_sql": "SELECT t.full_name FROM game g JOIN team t ON t.id IN (g.team_id_home, g.team_id_away) JOIN game_info gi ON g.game_id = gi.game_id WHERE strftime('%m-%d', gi.game_date) = '12-25' GROUP BY t.id, t.full_name HAVING COUNT(*) >= 5 ORDER BY CAST(SUM(CASE WHEN (g.team_id_home = t.id AND g.pts_home > g.pts_away) OR (g.team_id_away = t.id AND g.pts_away > g.pts_home) THEN 1 ELSE 0 END) AS FLOAT) / COUNT(*) DESC LIMIT 1",
+      "generated_sql": "SELECT \n    team_name,\n    COUNT(*) AS total_games,\n    SUM(CASE WHEN result = 'win' THEN 1 ELSE 0 END) AS wins,\n    SUM(CASE WHEN result = 'loss' THEN 1 ELSE 0 END) AS losses,\n    ROUND(SUM(CASE WHEN result = 'win' THEN 1 ELSE 0 END) * 100.0 / COUNT(*), 2) AS win_percentage\nFROM \n    games\nWHERE \n    EXTRACT(MONTH FROM game_date) = 12\n    AND EXTRACT(DAY FROM game_date) = 25\nGROUP BY \n    team_name\nORDER BY \n    win_percentage DESC, \n    wins DESC\nLIMIT 1;",
+      "prompt_used": "Convert this question to SQL:\nWhich team has the best record on Christmas Day?",
+      "result_match": false,
+      "success": false,
+      "generated_result": null,
+      "expected_result": null
+    },
+    {
+      "question": "What's the win percentage difference between teams with 3+ rest days vs fewer rest days?",
+      "expected_sql": "WITH rest_days AS (SELECT g.game_id, t.id, t.full_name, JULIANDAY(g.game_date) - JULIANDAY(LAG(g.game_date) OVER (PARTITION BY t.id ORDER BY g.game_date)) as days_rest, CASE WHEN (g.team_id_home = t.id AND g.pts_home > g.pts_away) OR (g.team_id_away = t.id AND g.pts_away > g.pts_home) THEN 1 ELSE 0 END as won FROM game g JOIN team t ON t.id IN (g.team_id_home, g.team_id_away)) SELECT ROUND(AVG(CASE WHEN days_rest >= 3 THEN won END) * 100, 2) - ROUND(AVG(CASE WHEN days_rest < 3 THEN won END) * 100, 2) as win_pct_diff FROM rest_days WHERE days_rest IS NOT NULL",
+      "generated_sql": "WITH RestDayStats AS (\n    SELECT \n        CASE WHEN rest_days >= 3 THEN 'ThreeOrMoreDays' ELSE 'FewerDays' END AS rest_category,\n        COUNT(*) AS total_games,\n        SUM(CASE WHEN result = 'win' THEN 1 ELSE 0 END) AS wins\n    FROM games\n    GROUP BY CASE WHEN rest_days >= 3 THEN 'ThreeOrMoreDays' ELSE 'FewerDays' END\n)\n\nSELECT \n    MAX(CASE WHEN rest_category = 'ThreeOrMoreDays' THEN (wins * 100.0 / total_games) END) AS three_plus_win_percentage,\n    MAX(CASE WHEN rest_category = 'FewerDays' THEN (wins * 100.0 / total_games) END) AS fewer_days_win_percentage,\n    MAX(CASE WHEN rest_category = 'ThreeOrMoreDays' THEN (wins * 100.0 / total_games) END) - \n    MAX(CASE WHEN rest_category = 'FewerDays' THEN (wins * 100.0 / total_games) END) AS win_percentage_difference\nFROM RestDayStats;",
+      "prompt_used": "Convert this question to SQL:\nWhat's the win percentage difference between teams with 3+ rest days vs fewer rest days?",
+      "result_match": false,
+      "success": false,
+      "generated_result": null,
+      "expected_result": null
+    },
+    {
+      "question": "How many players have played for both the Lakers and Celtics?",
+      "expected_sql": "WITH team_players AS (SELECT DISTINCT cpi.person_id FROM common_player_info cpi JOIN team t ON cpi.team_id = t.id WHERE t.nickname IN ('Lakers', 'Celtics')) SELECT COUNT(*) as players_count FROM (SELECT person_id FROM team_players GROUP BY person_id HAVING COUNT(*) = 2) x LIMIT 1",
+      "generated_sql": "SELECT COUNT(DISTINCT player_id) \nFROM player_teams\nWHERE team_id IN (\n    SELECT team_id \n    FROM teams \n    WHERE team_name = 'Lakers'\n)\nAND player_id IN (\n    SELECT player_id \n    FROM player_teams\n    WHERE team_id IN (\n        SELECT team_id \n        FROM teams \n        WHERE team_name = 'Celtics'\n    )\n);",
+      "prompt_used": "Convert this question to SQL:\nHow many players have played for both the Lakers and Celtics?",
+      "result_match": false,
+      "success": false,
+      "generated_result": null,
+      "expected_result": null
+    },
+    {
+      "question": "How many games have gone to multiple overtimes?",
+      "expected_sql": "SELECT COUNT(*) as multi_ot_games FROM game g JOIN line_score l ON g.game_id = l.game_id WHERE l.pts_ot2_home IS NOT NULL LIMIT 1",
+      "generated_sql": "SELECT COUNT(*) AS games_with_multiple_overtimes\nFROM games\nWHERE overtime_periods >= 2",
+      "prompt_used": "Convert this question to SQL:\nHow many games have gone to multiple overtimes?",
+      "result_match": false,
+      "success": false,
+      "generated_result": null,
+      "expected_result": null
+    },
+    {
+      "question": "What's the average game attendance?",
+      "expected_sql": "SELECT ROUND(AVG(attendance), 0) as avg_attendance FROM game_info WHERE attendance > 0 LIMIT 1",
+      "generated_sql": "SELECT AVG(attendance) AS average_attendance\nFROM games;",
+      "prompt_used": "Convert this question to SQL:\nWhat's the average game attendance?",
+      "result_match": false,
+      "success": false,
+      "generated_result": null,
+      "expected_result": null
+    },
+    {
+      "question": "Which team has the highest percentage of games with 100+ points scored?",
+      "expected_sql": "SELECT t.full_name FROM game g JOIN team t ON t.id IN (g.team_id_home, g.team_id_away) GROUP BY t.id, t.full_name HAVING COUNT(*) >= 50 ORDER BY CAST(SUM(CASE WHEN (g.team_id_home = t.id AND g.pts_home >= 100) OR (g.team_id_away = t.id AND g.pts_away >= 100) THEN 1 ELSE 0 END) AS FLOAT) / COUNT(*) * 100 DESC LIMIT 1",
+      "generated_sql": "SELECT \n    team_name,\n    (COUNT(CASE WHEN points >= 100 THEN 1 END) * 100.0 / COUNT(*)) AS percentage_games_100plus\nFROM \n    games\nGROUP BY \n    team_name\nORDER BY \n    percentage_games_100plus DESC\nLIMIT 1;",
+      "prompt_used": "Convert this question to SQL:\nWhich team has the highest percentage of games with 100+ points scored?",
+      "result_match": false,
+      "success": false,
+      "generated_result": null,
+      "expected_result": null
+    },
+    {
+      "question": "What's the largest point deficit in any game?",
+      "expected_sql": "SELECT MAX(ABS(pts_home - pts_away)) as max_deficit FROM game",
+      "generated_sql": "SELECT \n    MAX(ABS(home_score - away_score)) AS largest_point_deficit\nFROM \n    games;",
+      "prompt_used": "Convert this question to SQL:\nWhat's the largest point deficit in any game?",
+      "result_match": false,
+      "success": false,
+      "generated_result": null,
+      "expected_result": null
+    },
+    {
+      "question": "What percentage of games are won by the home team?",
+      "expected_sql": "SELECT ROUND(CAST(SUM(CASE WHEN pts_home > pts_away THEN 1 ELSE 0 END) AS FLOAT) / COUNT(*) * 100, 2) as home_win_pct FROM game",
+      "generated_sql": "SELECT \n    (COUNT(CASE WHEN home_score > away_score THEN 1 END) * 100.0 / COUNT(*)) AS home_win_percentage\nFROM \n    games",
+      "prompt_used": "Convert this question to SQL:\nWhat percentage of games are won by the home team?",
+      "result_match": false,
+      "success": false,
+      "generated_result": null,
+      "expected_result": null
+    },
+    {
+      "question": "Which team has the highest free throw percentage?",
+      "expected_sql": "SELECT t.full_name FROM game g JOIN team t ON t.id IN (g.team_id_home, g.team_id_away) GROUP BY t.id, t.full_name HAVING SUM(CASE WHEN g.team_id_home = t.id THEN g.fta_home ELSE g.fta_away END) >= 100 ORDER BY CAST(SUM(CASE WHEN g.team_id_home = t.id THEN g.ftm_home ELSE g.ftm_away END) AS FLOAT) / SUM(CASE WHEN g.team_id_home = t.id THEN g.fta_home ELSE g.fta_away END) * 100 DESC LIMIT 1",
+      "generated_sql": "SELECT \n    team_name,\n    (SUM(free_throws_made) / NULLIF(SUM(free_throws_attempted), 0)) * 100 AS free_throw_percentage\nFROM \n    teams\nJOIN \n    team_stats ON teams.team_id = team_stats.team_id\nGROUP BY \n    team_name\nORDER BY \n    free_throw_percentage DESC\nLIMIT 1;",
+      "prompt_used": "Convert this question to SQL:\nWhich team has the highest free throw percentage?",
+      "result_match": false,
+      "success": false,
+      "generated_result": null,
+      "expected_result": null
+    },
+    {
+      "question": "What's the average number of fouls per game?",
+      "expected_sql": "SELECT ROUND(AVG(pf_home + pf_away), 2) as avg_fouls FROM game",
+      "generated_sql": "SELECT AVG(fouls) AS average_fouls_per_game\nFROM games;",
+      "prompt_used": "Convert this question to SQL:\nWhat's the average number of fouls per game?",
+      "result_match": false,
+      "success": false,
+      "generated_result": null,
+      "expected_result": null
+    },
+    {
+      "question": "Which team has the highest 3-point shooting percentage?",
+      "expected_sql": "SELECT t.full_name FROM game g JOIN team t ON t.id IN (g.team_id_home, g.team_id_away) GROUP BY t.id, t.full_name HAVING SUM(CASE WHEN g.team_id_home = t.id THEN g.fg3a_home ELSE g.fg3a_away END) >= 100 ORDER BY CAST(SUM(CASE WHEN g.team_id_home = t.id THEN g.fg3m_home ELSE g.fg3m_away END) AS FLOAT) / SUM(CASE WHEN g.team_id_home = t.id THEN g.fg3a_home ELSE g.fg3a_away END) * 100 DESC LIMIT 1",
+      "generated_sql": "SELECT team_name, three_point_percentage\nFROM teams\nORDER BY three_point_percentage DESC\nLIMIT 1;",
+      "prompt_used": "Convert this question to SQL:\nWhich team has the highest 3-point shooting percentage?",
+      "result_match": false,
+      "success": false,
+      "generated_result": null,
+      "expected_result": null
+    },
+    {
+      "question": "What's the average number of rebounds per game?",
+      "expected_sql": "SELECT ROUND(AVG(reb_home + reb_away), 2) as avg_rebounds FROM game",
+      "generated_sql": "SELECT AVG(rebounds) AS average_rebounds_per_game\nFROM games;",
+      "prompt_used": "Convert this question to SQL:\nWhat's the average number of rebounds per game?",
+      "result_match": false,
+      "success": false,
+      "generated_result": null,
+      "expected_result": null
+    },
+    {
+      "question": "How many games were decided by a single possession (3 points or less)?",
+      "expected_sql": "SELECT COUNT(*) FROM game WHERE ABS(pts_home - pts_away) <= 3",
+      "generated_sql": "SELECT COUNT(*) AS single_possession_games\nFROM games\nWHERE ABS(home_score - away_score) <= 3",
+      "prompt_used": "Convert this question to SQL:\nHow many games were decided by a single possession (3 points or less)?",
+      "result_match": false,
+      "success": false,
+      "generated_result": null,
+      "expected_result": null
+    },
+    {
+      "question": "How many players were drafted in the first round in 2019?",
+      "expected_sql": "SELECT COUNT(*) FROM draft_history WHERE season = '2019' AND round_number = 1",
+      "generated_sql": "SELECT COUNT(*) AS first_round_draft_count\nFROM players\nWHERE draft_round = 1 \nAND draft_year = 2019;",
+      "prompt_used": "Convert this question to SQL:\nHow many players were drafted in the first round in 2019?",
+      "result_match": false,
+      "success": false,
+      "generated_result": null,
+      "expected_result": null
+    },
+    {
+      "question": "Which team has the highest average attendance?",
+      "expected_sql": "SELECT t.full_name FROM game g JOIN team t ON g.team_id_home = t.id JOIN game_info gi ON g.game_id = gi.game_id WHERE gi.attendance > 0 GROUP BY t.id, t.full_name ORDER BY AVG(gi.attendance) DESC LIMIT 1",
+      "generated_sql": "SELECT team, AVG(attendance) as average_attendance\nFROM games\nGROUP BY team\nORDER BY average_attendance DESC\nLIMIT 1;",
+      "prompt_used": "Convert this question to SQL:\nWhich team has the highest average attendance?",
+      "result_match": false,
+      "success": false,
+      "generated_result": null,
+      "expected_result": null
+    },
+    {
+      "question": "What's the most common final score in overtime games?",
+      "expected_sql": "SELECT g.pts_home || '-' || g.pts_away as score FROM game g JOIN line_score l ON g.game_id = l.game_id WHERE l.pts_ot1_home IS NOT NULL GROUP BY g.pts_home, g.pts_away ORDER BY COUNT(*) DESC LIMIT 1",
+      "generated_sql": "SELECT \n    home_score || '-' || away_score AS final_score,\n    COUNT(*) AS frequency\nFROM \n    games\nWHERE \n    is_overtime = TRUE\nGROUP BY \n    final_score\nORDER BY \n    frequency DESC\nLIMIT 1;",
+      "prompt_used": "Convert this question to SQL:\nWhat's the most common final score in overtime games?",
+      "result_match": false,
+      "success": false,
+      "generated_result": null,
+      "expected_result": null
+    },
+    {
+      "question": "How many players are from Kentucky?",
+      "expected_sql": "SELECT COUNT(*) FROM draft_history WHERE organization = 'Kentucky'",
+      "generated_sql": "SELECT COUNT(*) \nFROM players \nWHERE state = 'Kentucky';",
+      "prompt_used": "Convert this question to SQL:\nHow many players are from Kentucky?",
+      "result_match": false,
+      "success": false,
+      "generated_result": null,
+      "expected_result": null
+    },
+    {
+      "question": "Which team has the most assists per game?",
+      "expected_sql": "SELECT t.full_name FROM game g JOIN team t ON t.id IN (g.team_id_home, g.team_id_away) GROUP BY t.id, t.full_name ORDER BY CAST(SUM(CASE WHEN g.team_id_home = t.id THEN g.ast_home ELSE g.ast_away END) AS FLOAT) / COUNT(*) DESC LIMIT 1",
+      "generated_sql": "SELECT \n    team_name,\n    SUM(assists) / COUNT(DISTINCT game_id) AS assists_per_game\nFROM \n    team_game_stats\nGROUP BY \n    team_name\nORDER BY \n    assists_per_game DESC\nLIMIT 1;",
+      "prompt_used": "Convert this question to SQL:\nWhich team has the most assists per game?",
+      "result_match": false,
+      "success": false,
+      "generated_result": null,
+      "expected_result": null
+    },
+    {
+      "question": "What's the average height of centers?",
+      "expected_sql": "SELECT ROUND(AVG(CAST(SUBSTR(height, 1, INSTR(height, '-')-1) AS FLOAT)), 2) as avg_height FROM common_player_info WHERE position LIKE '%C%' AND height != ''",
+      "generated_sql": "SELECT AVG(height) AS average_height\nFROM players\nWHERE position = 'Center' OR position = 'C';",
+      "prompt_used": "Convert this question to SQL:\nWhat's the average height of centers?",
+      "result_match": false,
+      "success": false,
+      "generated_result": null,
+      "expected_result": null
+    },
+    {
+      "question": "Which team has the most playoff appearances?",
+      "expected_sql": "SELECT t.full_name FROM game g JOIN team t ON t.id IN (g.team_id_home, g.team_id_away) WHERE g.season_type = 'Playoffs' GROUP BY t.id, t.full_name ORDER BY COUNT(DISTINCT SUBSTR(g.season_id, 1, 4)) DESC LIMIT 1",
+      "generated_sql": "SELECT \n    team_name,\n    COUNT(*) AS playoff_appearances\nFROM \n    playoff_teams\nGROUP BY \n    team_name\nORDER BY \n    playoff_appearances DESC\nLIMIT 1;",
+      "prompt_used": "Convert this question to SQL:\nWhich team has the most playoff appearances?",
+      "result_match": false,
+      "success": false,
+      "generated_result": null,
+      "expected_result": null
+    },
+    {
+      "question": "What's the most common player height?",
+      "expected_sql": "SELECT height FROM common_player_info WHERE height != '' GROUP BY height ORDER BY COUNT(*) DESC LIMIT 1",
+      "generated_sql": "SELECT height, COUNT(*) AS count\nFROM players\nGROUP BY height\nORDER BY count DESC\nLIMIT 1;",
+      "prompt_used": "Convert this question to SQL:\nWhat's the most common player height?",
+      "result_match": false,
+      "success": false,
+      "generated_result": null,
+      "expected_result": null
+    },
+    {
+      "question": "How many games were played on New Year's Day?",
+      "expected_sql": "SELECT COUNT(*) FROM game_info WHERE strftime('%m-%d', game_date) = '01-01'",
+      "generated_sql": "SELECT COUNT(*) AS games_count\nFROM games\nWHERE MONTH(game_date) = 1 AND DAY(game_date) = 1;",
+      "prompt_used": "Convert this question to SQL:\nHow many games were played on New Year's Day?",
+      "result_match": false,
+      "success": false,
+      "generated_result": null,
+      "expected_result": null
+    },
+    {
+      "question": "Which team has the highest percentage of games with 10+ steals?",
+      "expected_sql": "SELECT t.full_name FROM game g JOIN team t ON t.id IN (g.team_id_home, g.team_id_away) GROUP BY t.id, t.full_name HAVING COUNT(*) >= 50 ORDER BY CAST(SUM(CASE WHEN (g.team_id_home = t.id AND g.stl_home >= 10) OR (g.team_id_away = t.id AND g.stl_away >= 10) THEN 1 ELSE 0 END) AS FLOAT) / COUNT(*) * 100 DESC LIMIT 1",
+      "generated_sql": "SELECT \n    team_name,\n    (COUNT(CASE WHEN steals >= 10 THEN 1 END) * 100.0 / COUNT(*)) AS percentage_games_with_10plus_steals\nFROM \n    team_games\nGROUP BY \n    team_name\nORDER BY \n    percentage_games_with_10plus_steals DESC\nLIMIT 1;",
+      "prompt_used": "Convert this question to SQL:\nWhich team has the highest percentage of games with 10+ steals?",
+      "result_match": false,
+      "success": false,
+      "generated_result": null,
+      "expected_result": null
+    },
+    {
+      "question": "What's the average number of blocks per game?",
+      "expected_sql": "SELECT ROUND(AVG(blk_home + blk_away), 2) as avg_blocks FROM game",
+      "generated_sql": "SELECT AVG(blocks) AS average_blocks_per_game\nFROM games;",
+      "prompt_used": "Convert this question to SQL:\nWhat's the average number of blocks per game?",
+      "result_match": false,
+      "success": false,
+      "generated_result": null,
+      "expected_result": null
+    },
+    {
+      "question": "Which team has the most games with 20+ assists?",
+      "expected_sql": "SELECT t.full_name FROM game g JOIN team t ON t.id IN (g.team_id_home, g.team_id_away) GROUP BY t.id, t.full_name ORDER BY SUM(CASE WHEN (g.team_id_home = t.id AND g.ast_home >= 20) OR (g.team_id_away = t.id AND g.ast_away >= 20) THEN 1 ELSE 0 END) DESC LIMIT 1",
+      "generated_sql": "SELECT \n    team_name,\n    COUNT(*) AS games_with_20plus_assists\nFROM \n    games\nWHERE \n    team_assists >= 20\nGROUP BY \n    team_name\nORDER BY \n    games_with_20plus_assists DESC\nLIMIT 1;",
+      "prompt_used": "Convert this question to SQL:\nWhich team has the most games with 20+ assists?",
+      "result_match": false,
+      "success": false,
+      "generated_result": null,
+      "expected_result": null
+    },
+    {
+      "question": "Which team has the lowest turnover rate?",
+      "expected_sql": "SELECT t.full_name FROM game g JOIN team t ON t.id IN (g.team_id_home, g.team_id_away) GROUP BY t.id, t.full_name HAVING COUNT(*) >= 50 ORDER BY CAST(SUM(CASE WHEN g.team_id_home = t.id THEN g.tov_home ELSE g.tov_away END) AS FLOAT) / COUNT(*) ASC LIMIT 1",
+      "generated_sql": "SELECT team_name\nFROM teams\nORDER BY turnover_rate ASC\nLIMIT 1;",
+      "prompt_used": "Convert this question to SQL:\nWhich team has the lowest turnover rate?",
+      "result_match": false,
+      "success": false,
+      "generated_result": null,
+      "expected_result": null
+    },
+    {
+      "question": "What's the average weight of power forwards?",
+      "expected_sql": "SELECT ROUND(AVG(CAST(weight AS FLOAT)), 2) as avg_weight FROM common_player_info WHERE position LIKE '%F%' AND weight != ''",
+      "generated_sql": "SELECT AVG(weight) AS average_weight\nFROM players\nWHERE position = 'Power Forward' OR position = 'PF';",
+      "prompt_used": "Convert this question to SQL:\nWhat's the average weight of power forwards?",
+      "result_match": false,
+      "success": false,
+      "generated_result": null,
+      "expected_result": null
+    },
+    {
+      "question": "Which team has the most games with 15+ three-pointers made?",
+      "expected_sql": "SELECT t.full_name FROM game g JOIN team t ON t.id IN (g.team_id_home, g.team_id_away) GROUP BY t.id, t.full_name ORDER BY SUM(CASE WHEN (g.team_id_home = t.id AND g.fg3m_home >= 15) OR (g.team_id_away = t.id AND g.fg3m_away >= 15) THEN 1 ELSE 0 END) DESC LIMIT 1",
+      "generated_sql": "SELECT \n    team_name,\n    COUNT(*) AS games_with_15plus_threes\nFROM \n    games\nWHERE \n    three_pointers_made >= 15\nGROUP BY \n    team_name\nORDER BY \n    games_with_15plus_threes DESC\nLIMIT 1;",
+      "prompt_used": "Convert this question to SQL:\nWhich team has the most games with 15+ three-pointers made?",
+      "result_match": false,
+      "success": false,
+      "generated_result": null,
+      "expected_result": null
+    },
+    {
+      "question": "What's the most common margin of victory?",
+      "expected_sql": "SELECT ABS(pts_home - pts_away) as margin FROM game GROUP BY margin ORDER BY COUNT(*) DESC LIMIT 1",
+      "generated_sql": "SELECT \n    margin_of_victory, \n    COUNT(*) as frequency\nFROM (\n    SELECT \n        ABS(home_score - away_score) as margin_of_victory\n    FROM games\n    WHERE home_score != away_score  -- Excluding ties\n) as victory_margins\nGROUP BY margin_of_victory\nORDER BY frequency DESC\nLIMIT 1;",
+      "prompt_used": "Convert this question to SQL:\nWhat's the most common margin of victory?",
+      "result_match": false,
+      "success": false,
+      "generated_result": null,
+      "expected_result": null
+    },
+    {
+      "question": "How many players have jersey numbers greater than 50?",
+      "expected_sql": "SELECT COUNT(*) FROM common_player_info WHERE CAST(jersey AS INTEGER) > 50 AND jersey != ''",
+      "generated_sql": "SELECT COUNT(*) \nFROM players \nWHERE jersey_number > 50;",
+      "prompt_used": "Convert this question to SQL:\nHow many players have jersey numbers greater than 50?",
+      "result_match": false,
+      "success": false,
+      "generated_result": null,
+      "expected_result": null
+    },
+    {
+      "question": "Which team has the highest offensive rebound percentage?",
+      "expected_sql": "SELECT t.full_name FROM game g JOIN team t ON t.id IN (g.team_id_home, g.team_id_away) GROUP BY t.id, t.full_name HAVING COUNT(*) >= 50 ORDER BY CAST(SUM(CASE WHEN g.team_id_home = t.id THEN g.oreb_home ELSE g.oreb_away END) AS FLOAT) / SUM(CASE WHEN g.team_id_home = t.id THEN (g.oreb_home + g.dreb_away) ELSE (g.oreb_away + g.dreb_home) END) * 100 DESC LIMIT 1",
+      "generated_sql": "SELECT \n    team_name,\n    offensive_rebound_percentage\nFROM \n    team_stats\nORDER BY \n    offensive_rebound_percentage DESC\nLIMIT 1;",
+      "prompt_used": "Convert this question to SQL:\nWhich team has the highest offensive rebound percentage?",
+      "result_match": false,
+      "success": false,
+      "generated_result": null,
+      "expected_result": null
+    },
+    {
+      "question": "What's the average number of three-point attempts per game?",
+      "expected_sql": "SELECT ROUND(AVG(fg3a_home + fg3a_away), 2) as avg_3pa FROM game",
+      "generated_sql": "SELECT AVG(three_point_attempts) AS average_three_point_attempts_per_game\nFROM games;",
+      "prompt_used": "Convert this question to SQL:\nWhat's the average number of three-point attempts per game?",
+      "result_match": false,
+      "success": false,
+      "generated_result": null,
+      "expected_result": null
+    },
+    {
+      "question": "Which team has the most games with 50+ rebounds?",
+      "expected_sql": "SELECT t.full_name FROM game g JOIN team t ON t.id IN (g.team_id_home, g.team_id_away) GROUP BY t.id, t.full_name ORDER BY SUM(CASE WHEN (g.team_id_home = t.id AND g.reb_home >= 50) OR (g.team_id_away = t.id AND g.reb_away >= 50) THEN 1 ELSE 0 END) DESC LIMIT 1",
+      "generated_sql": "SELECT \n    team_name,\n    COUNT(*) AS games_with_50plus_rebounds\nFROM \n    game_stats\nWHERE \n    rebounds >= 50\nGROUP BY \n    team_name\nORDER BY \n    games_with_50plus_rebounds DESC\nLIMIT 1;",
+      "prompt_used": "Convert this question to SQL:\nWhich team has the most games with 50+ rebounds?",
+      "result_match": false,
+      "success": false,
+      "generated_result": null,
+      "expected_result": null
+    },
+    {
+      "question": "How many players were drafted in the second round in 2017?",
+      "expected_sql": "SELECT COUNT(*) FROM draft_history WHERE season = '2017' AND round_number = 2",
+      "generated_sql": "SELECT COUNT(*) AS second_round_draft_count\nFROM players\nWHERE draft_round = 2\nAND draft_year = 2017;",
+      "prompt_used": "Convert this question to SQL:\nHow many players were drafted in the second round in 2017?",
+      "result_match": false,
+      "success": false,
+      "generated_result": null,
+      "expected_result": null
+    },
+    {
+      "question": "Which team has the highest field goal percentage in home games?",
+      "expected_sql": "SELECT t.full_name FROM game g JOIN team t ON g.team_id_home = t.id GROUP BY t.id, t.full_name HAVING COUNT(*) >= 20 ORDER BY CAST(SUM(g.fgm_home) AS FLOAT) / SUM(g.fga_home) * 100 DESC LIMIT 1",
+      "generated_sql": "SELECT \n    team_name,\n    (SUM(field_goals_made) * 100.0 / NULLIF(SUM(field_goals_attempted), 0)) AS field_goal_percentage\nFROM \n    games\nWHERE \n    is_home_game = TRUE\nGROUP BY \n    team_name\nORDER BY \n    field_goal_percentage DESC\nLIMIT 1;",
+      "prompt_used": "Convert this question to SQL:\nWhich team has the highest field goal percentage in home games?",
+      "result_match": false,
+      "success": false,
+      "generated_result": null,
+      "expected_result": null
+    },
+    {
+      "question": "What's the average number of personal fouls in playoff games?",
+      "expected_sql": "SELECT ROUND(AVG(pf_home + pf_away), 2) as avg_fouls FROM game WHERE season_type = 'Playoffs'",
+      "generated_sql": "SELECT AVG(personal_fouls) AS average_personal_fouls\nFROM games\nWHERE is_playoff = TRUE;",
+      "prompt_used": "Convert this question to SQL:\nWhat's the average number of personal fouls in playoff games?",
+      "result_match": false,
+      "success": false,
+      "generated_result": null,
+      "expected_result": null
+    },
+    {
+      "question": "Which team has the most games with 30+ assists?",
+      "expected_sql": "SELECT t.full_name FROM game g JOIN team t ON t.id IN (g.team_id_home, g.team_id_away) GROUP BY t.id, t.full_name ORDER BY SUM(CASE WHEN (g.team_id_home = t.id AND g.ast_home >= 30) OR (g.team_id_away = t.id AND g.ast_away >= 30) THEN 1 ELSE 0 END) DESC LIMIT 1",
+      "generated_sql": "SELECT \n    team_name,\n    COUNT(*) AS games_with_30plus_assists\nFROM \n    games\nWHERE \n    team_assists >= 30\nGROUP BY \n    team_name\nORDER BY \n    games_with_30plus_assists DESC\nLIMIT 1;",
+      "prompt_used": "Convert this question to SQL:\nWhich team has the most games with 30+ assists?",
+      "result_match": false,
+      "success": false,
+      "generated_result": null,
+      "expected_result": null
+    },
+    {
+      "question": "What's the most common player weight?",
+      "expected_sql": "SELECT weight FROM common_player_info WHERE weight != '' GROUP BY weight ORDER BY COUNT(*) DESC LIMIT 1",
+      "generated_sql": "SELECT weight, COUNT(*) AS count\nFROM players\nGROUP BY weight\nORDER BY count DESC\nLIMIT 1;",
+      "prompt_used": "Convert this question to SQL:\nWhat's the most common player weight?",
+      "result_match": false,
+      "success": false,
+      "generated_result": null,
+      "expected_result": null
+    },
+    {
+      "question": "How many games started before 7 PM local time?",
+      "expected_sql": "SELECT COUNT(*) FROM game_info WHERE CAST(SUBSTR(game_time, 1, 2) AS INTEGER) < 19",
+      "generated_sql": "SELECT COUNT(*) AS games_before_7pm\nFROM games\nWHERE TIME(start_time) < '19:00:00'",
+      "prompt_used": "Convert this question to SQL:\nHow many games started before 7 PM local time?",
+      "result_match": false,
+      "success": false,
+      "generated_result": null,
+      "expected_result": null
+    },
+    {
+      "question": "Which team has the highest percentage of games with 10+ blocks?",
+      "expected_sql": "SELECT t.full_name FROM game g JOIN team t ON t.id IN (g.team_id_home, g.team_id_away) GROUP BY t.id, t.full_name HAVING COUNT(*) >= 50 ORDER BY CAST(SUM(CASE WHEN (g.team_id_home = t.id AND g.blk_home >= 10) OR (g.team_id_away = t.id AND g.blk_away >= 10) THEN 1 ELSE 0 END) AS FLOAT) / COUNT(*) * 100 DESC LIMIT 1",
+      "generated_sql": "SELECT \n    team_name,\n    (COUNT(CASE WHEN blocks >= 10 THEN 1 END) * 100.0 / COUNT(*)) AS percentage_games_with_10plus_blocks\nFROM \n    games\nGROUP BY \n    team_name\nORDER BY \n    percentage_games_with_10plus_blocks DESC\nLIMIT 1;",
+      "prompt_used": "Convert this question to SQL:\nWhich team has the highest percentage of games with 10+ blocks?",
+      "result_match": false,
+      "success": false,
+      "generated_result": null,
+      "expected_result": null
+    },
+    {
+      "question": "What's the average number of steals per game?",
+      "expected_sql": "SELECT ROUND(AVG(stl_home + stl_away), 2) as avg_steals FROM game",
+      "generated_sql": "SELECT AVG(steals_per_game) \nFROM games;",
+      "prompt_used": "Convert this question to SQL:\nWhat's the average number of steals per game?",
+      "result_match": false,
+      "success": false,
+      "generated_result": null,
+      "expected_result": null
+    },
+    {
+      "question": "Which team has the most games with 120+ points scored?",
+      "expected_sql": "SELECT t.full_name FROM game g JOIN team t ON t.id IN (g.team_id_home, g.team_id_away) GROUP BY t.id, t.full_name ORDER BY SUM(CASE WHEN (g.team_id_home = t.id AND g.pts_home >= 120) OR (g.team_id_away = t.id AND g.pts_away >= 120) THEN 1 ELSE 0 END) DESC LIMIT 1",
+      "generated_sql": "SELECT \n    team_name,\n    COUNT(*) AS games_with_120_plus_points\nFROM \n    games\nWHERE \n    points_scored >= 120\nGROUP BY \n    team_name\nORDER BY \n    games_with_120_plus_points DESC\nLIMIT 1;",
+      "prompt_used": "Convert this question to SQL:\nWhich team has the most games with 120+ points scored?",
+      "result_match": false,
+      "success": false,
+      "generated_result": null,
+      "expected_result": null
+    },
+    {
+      "question": "What percentage of games are decided by 5 points or less?",
+      "expected_sql": "SELECT ROUND(CAST(SUM(CASE WHEN ABS(pts_home - pts_away) <= 5 THEN 1 ELSE 0 END) AS FLOAT) / COUNT(*) * 100, 2) as close_game_pct FROM game",
+      "generated_sql": "SELECT \n    (COUNT(CASE WHEN ABS(home_score - away_score) <= 5 THEN 1 END) * 100.0 / COUNT(*)) AS percentage_of_close_games\nFROM games;",
+      "prompt_used": "Convert this question to SQL:\nWhat percentage of games are decided by 5 points or less?",
+      "result_match": false,
+      "success": false,
+      "generated_result": null,
+      "expected_result": null
+    }
+  ],
+  "metrics": {
+    "total": 98,
+    "successful": 0,
+    "result_matches": 0,
+    "success_rate": 0.0,
+    "result_match_rate": 0.0,
+    "failure_rate": 1.0
+  }
+}
