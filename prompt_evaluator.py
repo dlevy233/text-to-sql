@@ -10,6 +10,7 @@ from tqdm import tqdm
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 import numpy as np
+import time
 
 # Load environment variables from .env file
 load_dotenv()
@@ -119,10 +120,13 @@ def format_detailed_schema(schema_info):
     return schema_text
 
 # Add a function to find relevant query examples
-def get_relevant_examples(question, ground_truth_data, top_n=3):
+def get_relevant_examples(question, ground_truth_data, top_n=20):
     """Find the most relevant examples from ground truth data for a given question."""
-    # Extract questions from ground truth data
-    gt_questions = [item['natural_language'] for item in ground_truth_data]
+    # Filter out the current question from ground truth data
+    filtered_gt_data = [item for item in ground_truth_data if item['natural_language'] != question]
+    
+    # Extract questions from filtered ground truth data
+    gt_questions = [item['natural_language'] for item in filtered_gt_data]
     
     # Create a TF-IDF vectorizer
     vectorizer = TfidfVectorizer(stop_words='english')
@@ -136,8 +140,8 @@ def get_relevant_examples(question, ground_truth_data, top_n=3):
     # Get indices of top N most similar questions
     top_indices = np.argsort(cosine_similarities)[-top_n:][::-1]
     
-    # Return the corresponding examples
-    return [ground_truth_data[i] for i in top_indices]
+    # Return the corresponding examples from filtered data
+    return [filtered_gt_data[i] for i in top_indices]
 
 # Add a function to execute a query and get sample results
 def get_query_results_sample(query, db_path, max_rows=3):

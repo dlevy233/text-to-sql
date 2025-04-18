@@ -26,24 +26,16 @@ These results are based on a comprehensive evaluation of 98 test cases from the 
 
 ### How Schema Injection Works
 
-The `--inject-schema` flag enables a powerful feature that significantly improves query generation accuracy. When enabled, the system:
+The schema injection feature provides three key benefits:
 
-1. **Schema Context**: Injects detailed database schema information including:
-   - Table structures with column names and types
-   - Primary and foreign key relationships
-   - Table row counts for better context
-   - Data type information for each column
+1. **Schema Context**: The prompt includes detailed database schema information, helping the model understand table structures, relationships, and data types.
 
-2. **Relevant Examples**: Automatically finds and includes similar past queries by:
-   - Using TF-IDF similarity to find relevant examples
-   - Including both the natural language question and its correct SQL
-   - Showing sample results from these examples
+2. **Relevant Examples**: The system automatically finds and includes the 10 most similar examples from the ground truth data (excluding the current question to prevent data leakage) using TF-IDF similarity. Each example includes:
+   - The natural language question
+   - The corresponding SQL query
+   - Sample results from executing the query
 
-3. **Contextual Learning**: The model uses this additional context to:
-   - Better understand table relationships
-   - Make informed decisions about join conditions
-   - Choose appropriate column names and data types
-   - Learn from similar past queries
+3. **Contextual Learning**: By seeing similar questions and their solutions, the model can better understand the relationships between natural language and SQL, leading to more accurate query generation.
 
 The schema injection feature is particularly effective because it:
 - Reduces ambiguity in table and column references
@@ -51,10 +43,6 @@ The schema injection feature is particularly effective because it:
 - Shows the model how similar queries were handled
 - Helps avoid common SQL generation mistakes
 
-To use schema injection, simply add the `--inject-schema` flag when running the evaluator:
-```bash
-python prompt_evaluator.py --inject-schema
-```
 
 ## Features
 
@@ -136,59 +124,24 @@ python prompt_evaluator.py --prompt ./prompts/optimized.txt --output ./eval_logs
 
 The system automatically saves detailed evaluation results in the `./eval_logs` directory. Each evaluation run creates a JSON file containing:
 
-- The prompt template used
-- Configuration settings (schema injection, sample size, etc.)
-- Individual query results including:
-  - Original question
-  - Generated SQL
-  - Expected SQL
-  - Query execution results
-  - Success/failure status
-- Overall performance metrics
+1. The prompt template used
+2. Configuration settings (including whether schema injection was enabled)
+3. Individual query results for each test case
+4. Overall performance metrics
 
-Example evaluation result structure:
-```json
-{
-  "prompt_template": "...",
-  "prompt_path": "./prompts/optimized.txt",
-  "inject_schema": true,
-  "results": [
-    {
-      "question": "What is the average points per game for players in the 2023 season?",
-      "expected_sql": "SELECT AVG(points) FROM player_stats WHERE season = '2023'",
-      "generated_sql": "...",
-      "success": true,
-      "result_match": true
-    }
-  ],
-  "metrics": {
-    "total": 98,
-    "successful": 90,
-    "success_rate": 0.9184
-  }
-}
-```
+The JSON structure includes:
+- Original question
+- Generated SQL
+- Expected SQL
+- Success status
+- Performance metrics (accuracy, result match rate)
 
-To analyze results across different runs, you can:
-1. Compare different prompt versions
-2. Track performance improvements
-3. Identify common failure patterns
-4. Optimize prompt templates based on results
+You can analyze results across different runs to:
+- Compare different prompt versions
+- Track performance improvements
+- Identify patterns in successful/failed queries
 
-## Data Format
 
-The ground truth data should be in JSON format with the following structure:
-```json
-{
-  "questions": [
-    {
-      "question": "What is the average points per game for players in the 2023 season?",
-      "sql": "SELECT AVG(points) FROM player_stats WHERE season = '2023'",
-      "expected_results": [...]
-    }
-  ]
-}
-```
 
 
 
